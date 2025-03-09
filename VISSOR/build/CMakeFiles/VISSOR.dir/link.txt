@@ -1,0 +1,1 @@
+/usr/bin/cc -Wl,--dependency-file=CMakeFiles/VISSOR.dir/link.d CMakeFiles/VISSOR.dir/src/VISSOR.c.o -o VISSOR

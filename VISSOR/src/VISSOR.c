@@ -1,116 +1,166 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
+#include <time.h>
 
 #define MAX_DISPOSITIVOS 10
-#define MAX_NOMBRE 50
-#define MAX_TIPO 50
-#define MAX_ESTADO 20
+#define MAX_CATEGORIAS 3
+#define MAX_NOMBRE 100
 
-// Arreglos para almacenar la información de los dispositivos
-char nombres[MAX_DISPOSITIVOS][MAX_NOMBRE];
-char tipos[MAX_DISPOSITIVOS][MAX_TIPO];
-char estados[MAX_DISPOSITIVOS][MAX_ESTADO];
+// Arrays para almacenar los nombres, categorías, estados y valores de los
+// dispositivos
+char nombresDispositivos[MAX_DISPOSITIVOS][MAX_NOMBRE];
+char categoriasDispositivos[MAX_DISPOSITIVOS][MAX_NOMBRE];
+char estadosDispositivos[MAX_DISPOSITIVOS][MAX_NOMBRE];
+int contadorDispositivos = 0;
 
-// Función para inicializar los dispositivos
-void inicializarDispositivos() {
-  for (int i = 0; i < MAX_DISPOSITIVOS; i++) {
-    snprintf(nombres[i], MAX_NOMBRE, "Dispositivo_%d", i);
-    strcpy(tipos[i], "No definido");
-    strcpy(estados[i], "Apagado");
-  }
-}
+// Arrays para las categorías disponibles
+char categorias[MAX_CATEGORIAS][MAX_NOMBRE] = {
+    "Motores", "Bombas y Compresores",
+    "Líneas de Producción (Cintas Transportadoras)"};
 
-// Función para mostrar todos los dispositivos
-void mostrarDispositivos() {
-  printf("\n=== Monitoreo de Dispositivos ===\n");
-  for (int i = 0; i < MAX_DISPOSITIVOS; i++) {
-    printf("[%d] Nombre: %s | Tipo: %s | Estado: %s\n", i, nombres[i], tipos[i],
-           estados[i]);
-  }
-}
-
-// Función para registrar un dispositivo
-void registrarDispositivo() {
-  int id;
-  printf("\nIngrese el ID del dispositivo (0-9): ");
-  scanf("%d", &id);
-
-  if (id >= 0 && id < MAX_DISPOSITIVOS) {
-    printf("Ingrese el nombre del dispositivo: ");
-    scanf("%s", nombres[id]);
-
-    printf("Ingrese el tipo del dispositivo: ");
-    scanf("%s", tipos[id]);
-
-    strcpy(estados[id], "Apagado");
-    printf("Dispositivo registrado exitosamente.\n");
+// Funciones para actualizar el estado de los dispositivos
+void actualizarEstadoMotor(float velocidad, int indice) {
+  if (velocidad > 80.0) {
+    strcpy(estadosDispositivos[indice], "⚠️ Alerta: Motor con alta velocidad!");
   } else {
-    printf("ID no válido.\n");
+    strcpy(estadosDispositivos[indice], "✅ Motor funcionando correctamente.");
   }
 }
 
-// Función para gestionar el estado de un dispositivo
-void gestionarDispositivo() {
-  int id, accion;
-  printf("\nIngrese el ID del dispositivo a gestionar (0-9): ");
-  scanf("%d", &id);
+void actualizarEstadoBandaTransportadora(float velocidad, int indice) {
+  if (velocidad > 400.0) {
+    strcpy(estadosDispositivos[indice],
+           "⚠️ Alerta: Banda transportadora con velocidad muy alta!");
+  } else {
+    strcpy(estadosDispositivos[indice],
+           "✅ Banda transportadora funcionando correctamente.");
+  }
+}
 
-  if (id >= 0 && id < MAX_DISPOSITIVOS) {
-    printf("Dispositivo: %s\nEstado actual: %s\n", nombres[id], estados[id]);
-    printf("Seleccione una acción:\n1. Encender\n2. Apagar\n3. Reiniciar\n");
-    scanf("%d", &accion);
+// Función para mostrar menú
+void mostrarMenu() {
+  printf("\n=== Menú VISSOR ===\n");
+  printf("1. Monitorear por Categoría\n");
+  printf("2. Agregar Nuevo Dispositivo\n");
+  printf("3. Salir\n");
+  printf("Seleccione una opción: ");
+}
 
-    switch (accion) {
-    case 1:
-      strcpy(estados[id], "Encendido");
-      break;
-    case 2:
-      strcpy(estados[id], "Apagado");
-      break;
-    case 3:
-      strcpy(estados[id], "Reiniciando");
-      break;
-    default:
-      printf("Acción no válida.\n");
-      return;
+// Función para agregar dispositivos
+void agregarDispositivo() {
+  if (contadorDispositivos >= MAX_DISPOSITIVOS) {
+    printf("⚠️ No se pueden agregar más dispositivos, el límite ha sido "
+           "alcanzado.\n");
+    return;
+  }
+
+  printf("\nIngrese el nombre del dispositivo: ");
+  scanf(" %[^\n]", nombresDispositivos[contadorDispositivos]);
+
+  // Menú para seleccionar la categoría
+  int categoria;
+  int categoriaValida = 0;
+  while (!categoriaValida) {
+    printf("\nSeleccione la categoría del dispositivo:\n");
+    for (int i = 0; i < MAX_CATEGORIAS; i++) {
+      printf("%d. %s\n", i + 1, categorias[i]);
     }
-    printf("Acción realizada exitosamente.\n");
-  } else {
-    printf("ID no válido.\n");
+
+    scanf("%d", &categoria);
+
+    if (categoria >= 1 && categoria <= MAX_CATEGORIAS) {
+      strcpy(categoriasDispositivos[contadorDispositivos],
+             categorias[categoria - 1]);
+      categoriaValida = 1; // Categoria válida
+    } else {
+      printf("⚠️ Opción no válida. Intente nuevamente.\n");
+    }
   }
+
+  // Asignar estado inicial como 'OK'
+  strcpy(estadosDispositivos[contadorDispositivos],
+         "✅ Dispositivo agregado correctamente.");
+
+  contadorDispositivos++;
+  printf("Dispositivo agregado exitosamente.\n");
 }
 
-// Función principal con el menú integrado
+// Función para mostrar dispositivos de una categoría específica
+void monitorearPorCategoria() {
+  int categoriaSeleccionada;
+  int categoriaValida = 0;
+
+  // Selección de categoría con validación
+  while (!categoriaValida) {
+    printf("\nSeleccione la categoría que desea monitorear:\n");
+    for (int i = 0; i < MAX_CATEGORIAS; i++) {
+      printf("%d. %s\n", i + 1, categorias[i]);
+    }
+
+    scanf("%d", &categoriaSeleccionada);
+
+    if (categoriaSeleccionada >= 1 && categoriaSeleccionada <= MAX_CATEGORIAS) {
+      categoriaValida = 1; // Categoría válida
+    } else {
+      printf("⚠️ Opción no válida. Intente nuevamente.\n");
+    }
+  }
+
+  printf("\n=== Dispositivos en la categoría '%s' ===\n",
+         categorias[categoriaSeleccionada - 1]);
+  printf("| %-25s | %-25s | %-20s | %-20s |\n", "Dispositivo", "Categoría",
+         "Estado", "Lectura");
+  printf("|-------------------------|-------------------------|----------------"
+         "------|----------------------|\n");
+
+  // Mostrar los dispositivos de la categoría seleccionada
+  for (int i = 0; i < contadorDispositivos; i++) {
+    if (strcmp(categoriasDispositivos[i],
+               categorias[categoriaSeleccionada - 1]) == 0) {
+      // Asignar estado según el dispositivo y categoría
+      float lectura = 0.0;
+      if (strcmp(categoriasDispositivos[i], "Motores") == 0) {
+        lectura =
+            (rand() % 100) + ((float)rand() / RAND_MAX); // Simulación de motor
+        actualizarEstadoMotor(lectura, i);
+      } else if (strcmp(categoriasDispositivos[i],
+                        "Líneas de Producción (Cintas Transportadoras)") == 0) {
+        lectura =
+            (rand() % 500) +
+            ((float)rand() / RAND_MAX); // Simulación de banda transportadora
+        actualizarEstadoBandaTransportadora(lectura, i);
+      }
+
+      printf("| %-25s | %-25s | %-20s | %-20.2f |\n", nombresDispositivos[i],
+             categoriasDispositivos[i], estadosDispositivos[i], lectura);
+    }
+  }
+  printf("\n");
+}
+
 int main() {
+  srand(time(NULL));
   int opcion;
-  inicializarDispositivos();
 
   do {
-    printf("\n===== Sistema VISSOR (Primitivo) =====\n");
-    printf("1. Registrar dispositivo\n");
-    printf("2. Monitorear dispositivos\n");
-    printf("3. Gestionar dispositivo\n");
-    printf("4. Salir\n");
-    printf("Seleccione una opción: ");
+    mostrarMenu();
     scanf("%d", &opcion);
 
     switch (opcion) {
     case 1:
-      registrarDispositivo();
+      monitorearPorCategoria(); // Monitorear por categoría seleccionada
       break;
     case 2:
-      mostrarDispositivos();
+      agregarDispositivo(); // Agregar un nuevo dispositivo
       break;
     case 3:
-      gestionarDispositivo();
-      break;
-    case 4:
       printf("Saliendo del sistema...\n");
       break;
     default:
-      printf("Opción no válida.\n");
+      printf("⚠️ Opción no válida. Intente nuevamente.\n");
     }
-  } while (opcion != 4);
+  } while (opcion != 3);
 
   return 0;
 }

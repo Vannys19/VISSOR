@@ -38,6 +38,15 @@ void actualizarEstadoBandaTransportadora(float velocidad, int indice) {
   }
 }
 
+void actualizarEstadoBombasCompresores(float presion, int indice) {
+  if (presion > 600.0) {
+    strcpy(estadosDispositivos[indice],
+           "⚠️ Alerta: Bomba con presión muy alta!");
+  } else {
+    strcpy(estadosDispositivos[indice], "✅ Bomba funcionando correctamente.");
+  }
+}
+
 // Función para mostrar menú
 void mostrarMenu() {
   printf("\n=== Menú VISSOR ===\n");
@@ -130,8 +139,13 @@ void monitorearPorCategoria() {
             (rand() % 500) +
             ((float)rand() / RAND_MAX); // Simulación de banda transportadora
         actualizarEstadoBandaTransportadora(lectura, i);
+      } else if (strcmp(categoriasDispositivos[i], "Bombas y Compresores") ==
+                 0) {
+        lectura =
+            (rand() % 700) +
+            ((float)rand() / RAND_MAX); // Simulación de banda transportadora
+        actualizarEstadoBombasCompresores(lectura, i);
       }
-
       printf("| %-25s | %-25s | %-20s | %-20.2f |\n", nombresDispositivos[i],
              categoriasDispositivos[i], estadosDispositivos[i], lectura);
     }

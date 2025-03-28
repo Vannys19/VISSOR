@@ -24,7 +24,8 @@ void actualizarEstadoMotor(float velocidad, int indice) {
   if (velocidad > 80.0) {
     strcpy(estadosDispositivos[indice], "⚠️ Alerta: Motor con alta velocidad!");
   } else {
-    strcpy(estadosDispositivos[indice], "✅ Motor funcionando correctamente.");
+    strcpy(estadosDispositivos[indice],
+           "[OK] - Motor funcionando correctamente.");
   }
 }
 
@@ -34,7 +35,7 @@ void actualizarEstadoBandaTransportadora(float velocidad, int indice) {
            "⚠️ Alerta: Banda transportadora con velocidad muy alta!");
   } else {
     strcpy(estadosDispositivos[indice],
-           "✅ Banda transportadora funcionando correctamente.");
+           "[OK] - Banda transportadora funcionando correctamente.");
   }
 }
 
@@ -89,10 +90,10 @@ void agregarDispositivo() {
 
   // Asignar estado inicial como 'OK'
   strcpy(estadosDispositivos[contadorDispositivos],
-         "✅ Dispositivo agregado correctamente.");
+         "[OK] - Dispositivo agregado correctamente.");
 
   contadorDispositivos++;
-  printf("Dispositivo agregado exitosamente.\n");
+  printf("[OK] - Dispositivo agregado exitosamente.\n");
 }
 
 // Función para mostrar dispositivos de una categoría específica

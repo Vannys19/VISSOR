@@ -10,6 +10,7 @@ CMakeFiles/VISSOR.dir/src/VISSOR.c.o: /home/re-l/Escritorio/github/VISSOR/VISSOR
   /usr/include/bits/floatn-common.h \
   /usr/include/bits/floatn.h \
   /usr/include/bits/libc-header-start.h \
+  /usr/include/bits/locale.h \
   /usr/include/bits/long-double.h \
   /usr/include/bits/pthreadtypes-arch.h \
   /usr/include/bits/pthreadtypes.h \
@@ -20,7 +21,6 @@ CMakeFiles/VISSOR.dir/src/VISSOR.c.o: /home/re-l/Escritorio/github/VISSOR/VISSOR
   /usr/include/bits/struct_mutex.h \
   /usr/include/bits/struct_rwlock.h \
   /usr/include/bits/thread-shared-types.h \
-  /usr/include/bits/time.h \
   /usr/include/bits/time64.h \
   /usr/include/bits/timesize.h \
   /usr/include/bits/types.h \
@@ -37,10 +37,8 @@ CMakeFiles/VISSOR.dir/src/VISSOR.c.o: /home/re-l/Escritorio/github/VISSOR/VISSOR
   /usr/include/bits/types/locale_t.h \
   /usr/include/bits/types/sigset_t.h \
   /usr/include/bits/types/struct_FILE.h \
-  /usr/include/bits/types/struct_itimerspec.h \
   /usr/include/bits/types/struct_timespec.h \
   /usr/include/bits/types/struct_timeval.h \
-  /usr/include/bits/types/struct_tm.h \
   /usr/include/bits/types/time_t.h \
   /usr/include/bits/types/timer_t.h \
   /usr/include/bits/typesizes.h \
@@ -53,6 +51,7 @@ CMakeFiles/VISSOR.dir/src/VISSOR.c.o: /home/re-l/Escritorio/github/VISSOR/VISSOR
   /usr/include/features.h \
   /usr/include/gnu/stubs-64.h \
   /usr/include/gnu/stubs.h \
+  /usr/include/locale.h \
   /usr/include/stdc-predef.h \
   /usr/include/stdio.h \
   /usr/include/stdlib.h \
@@ -61,7 +60,6 @@ CMakeFiles/VISSOR.dir/src/VISSOR.c.o: /home/re-l/Escritorio/github/VISSOR/VISSOR
   /usr/include/sys/cdefs.h \
   /usr/include/sys/select.h \
   /usr/include/sys/types.h \
-  /usr/include/time.h \
   /usr/lib/gcc/x86_64-pc-linux-gnu/14.2.1/include/stdarg.h \
   /usr/lib/gcc/x86_64-pc-linux-gnu/14.2.1/include/stddef.h
 
@@ -102,8 +100,6 @@ VISSOR: /usr/lib/Scrt1.o \
 
 /usr/lib/gcc/x86_64-pc-linux-gnu/14.2.1/include/stdarg.h:
 
-/usr/include/time.h:
-
 /usr/include/bits/types/FILE.h:
 
 /usr/include/bits/types/__locale_t.h:
@@ -116,8 +112,6 @@ VISSOR: /usr/lib/Scrt1.o \
 
 /usr/include/bits/byteswap.h:
 
-/usr/include/bits/time.h:
-
 /usr/include/bits/thread-shared-types.h:
 
 /usr/include/bits/types/__fpos64_t.h:
@@ -128,9 +122,17 @@ VISSOR: /usr/lib/Scrt1.o \
 
 /usr/include/bits/stdint-intn.h:
 
+/usr/lib/gcc/x86_64-pc-linux-gnu/14.2.1/include/stddef.h:
+
+/usr/include/bits/struct_mutex.h:
+
+/usr/include/gnu/stubs-64.h:
+
 /usr/include/bits/libc-header-start.h:
 
 /usr/include/strings.h:
+
+/usr/include/bits/locale.h:
 
 /usr/include/alloca.h:
 
@@ -140,17 +142,7 @@ VISSOR: /usr/lib/Scrt1.o \
 
 /usr/include/bits/types/__sigset_t.h:
 
-/usr/include/sys/types.h:
-
-/usr/include/bits/types/struct_itimerspec.h:
-
 /usr/include/bits/waitflags.h:
-
-/usr/lib/gcc/x86_64-pc-linux-gnu/14.2.1/include/stddef.h:
-
-/usr/include/bits/struct_mutex.h:
-
-/usr/include/gnu/stubs-64.h:
 
 /usr/include/bits/endianness.h:
 
@@ -210,8 +202,6 @@ CMakeFiles/VISSOR.dir/src/VISSOR.c.o:
 
 /usr/include/bits/types/struct_timeval.h:
 
-/usr/include/bits/types/struct_tm.h:
-
 /usr/include/bits/struct_rwlock.h:
 
 /usr/include/bits/types/time_t.h:
@@ -224,6 +214,8 @@ CMakeFiles/VISSOR.dir/src/VISSOR.c.o:
 
 /usr/include/bits/waitstatus.h:
 
+/usr/include/locale.h:
+
 /usr/include/features.h:
 
 /usr/include/gnu/stubs.h:
@@ -231,3 +223,5 @@ CMakeFiles/VISSOR.dir/src/VISSOR.c.o:
 /usr/include/bits/types/timer_t.h:
 
 /usr/include/stdio.h:
+
+/usr/include/sys/types.h:

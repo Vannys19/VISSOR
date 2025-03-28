@@ -1,219 +1,135 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <time.h>
 #include <locale.h>
 
 #define MAX_DISPOSITIVOS 10
 #define MAX_CATEGORIAS 3
 #define MAX_NOMBRE 100
+#define ARCHIVO_DISPOSITIVOS "dispositivos.txt"
 
-// Arrays para almacenar los nombres, categorÃ­as, estados y valores de los
-// dispositivos
-char nombresDispositivos[MAX_DISPOSITIVOS][MAX_NOMBRE];
-char categoriasDispositivos[MAX_DISPOSITIVOS][MAX_NOMBRE];
-char estadosDispositivos[MAX_DISPOSITIVOS][MAX_NOMBRE];
+// Definición de la estructura para un dispositivo
+typedef struct {
+    int id; // ID real usado internamente, pero no se guarda en el archivo como "00"
+    char nombre[MAX_NOMBRE];
+    char categoria[MAX_NOMBRE];
+    int valor;
+    char estado[MAX_NOMBRE];
+} Dispositivo;
+
+Dispositivo dispositivos[MAX_DISPOSITIVOS];
 int contadorDispositivos = 0;
 
-// Arrays para las categorÃ­as disponibles
+// Arrays para las categorías disponibles
 char categorias[MAX_CATEGORIAS][MAX_NOMBRE] = {
-    "Motores", "Bombas y Compresores",
-    "Líneas de Producción (Cintas Transportadoras)"};
+    "Motores", "Bombas y Compresores", "Líneas de Producción (Cintas Transportadoras)"
+};
 
-// Funciones para actualizar el estado de los dispositivos
-void actualizarEstadoMotor(float velocidad, int indice)
-{
-  if (velocidad > 80.0)
-  {
-    strcpy(estadosDispositivos[indice], "[WARNING] - Motor con alta velocidad!");
-  }
-  else
-  {
-    strcpy(estadosDispositivos[indice],
-           "[OK] - Motor funcionando correctamente.");
-  }
+// Función para mostrar menú
+void mostrarMenu() {
+    printf("\n=== Menú VISSOR ===\n");
+    printf("1. Monitorear Dispositivos\n");
+    printf("2. Agregar Nuevo Dispositivo\n");
+    printf("3. Salir\n");
+    printf("Seleccione una opción: ");
 }
 
-void actualizarEstadoBandaTransportadora(float velocidad, int indice)
-{
-  if (velocidad > 400.0)
-  {
-    strcpy(estadosDispositivos[indice],
-           "[WARNING] - Banda transportadora con velocidad muy alta!");
-  }
-  else
-  {
-    strcpy(estadosDispositivos[indice],
-           "[OK] - Banda transportadora funcionando correctamente.");
-  }
+// Función para agregar dispositivos
+void agregarDispositivo() {
+    if (contadorDispositivos >= MAX_DISPOSITIVOS) {
+        printf("[ERROR] - No se pueden agregar más dispositivos, el límite ha sido alcanzado.\n");
+        return;
+    }
+
+    // Asignar un ID único (aunque será mostrado como "00")
+    dispositivos[contadorDispositivos].id = contadorDispositivos + 1;
+
+    printf("\nIngrese el nombre del dispositivo: ");
+    scanf(" %[^\n]", dispositivos[contadorDispositivos].nombre);
+
+    // Menú para seleccionar la categoría
+    int categoria;
+    int categoriaValida = 0;
+    while (!categoriaValida) {
+        int i;
+        printf("\nSeleccione la categoría del dispositivo:\n");
+        for (i = 0; i < MAX_CATEGORIAS; i++) {
+            printf("%d. %s\n", i + 1, categorias[i]);
+        }
+
+        scanf("%d", &categoria);
+
+        if (categoria >= 1 && categoria <= MAX_CATEGORIAS) {
+            strcpy(dispositivos[contadorDispositivos].categoria, categorias[categoria - 1]);
+            categoriaValida = 1; // Categoría válida
+        } else {
+            printf("[ERROR] - Opción no válida. Intente nuevamente.\n");
+        }
+    }
+
+    // Asignar valores y estado predeterminado
+    dispositivos[contadorDispositivos].valor = 0;
+    strcpy(dispositivos[contadorDispositivos].estado, "*");
+
+    // Escribir el dispositivo en el archivo con el ID como "00"
+    FILE *file = fopen(ARCHIVO_DISPOSITIVOS, "a");
+    if (file) {
+        fprintf(file, "00,%s,%s,%d,%s\n", dispositivos[contadorDispositivos].nombre,
+                dispositivos[contadorDispositivos].categoria, dispositivos[contadorDispositivos].valor,
+                dispositivos[contadorDispositivos].estado);
+        fclose(file);
+    } else {
+        printf("[ERROR] - No se pudo abrir el archivo.\n");
+    }
+
+    contadorDispositivos++;
+    printf("[OK] - Dispositivo agregado exitosamente.\n");
 }
 
-void actualizarEstadoBombasCompresores(float presion, int indice)
-{
-  if (presion > 600.0)
-  {
-    strcpy(estadosDispositivos[indice],
-           "[WARNING] - Bomba con presión muy alta!");
-  }
-  else
-  {
-    strcpy(estadosDispositivos[indice], "[OK] - Bomba funcionando correctamente.");
-  }
+// Función para monitorear todos los dispositivos (sin importar la categoría)
+void monitorearDispositivos() {
+    FILE *file = fopen(ARCHIVO_DISPOSITIVOS, "r");
+    if (!file) {
+        printf("[ERROR] - No se pudo abrir el archivo de dispositivos.\n");
+        return;
+    }
+
+    printf("\n=== Todos los Dispositivos ===\n");
+    printf("| %-5s | %-25s | %-25s | %-10s | %-20s |\n", "ID", "Dispositivo", "Categoría", "Valor", "Estado");
+    printf("|------|-------------------------|-------------------------|------------|----------------------|\n");
+
+    int id, valor;
+    char nombre[MAX_NOMBRE], categoria[MAX_NOMBRE], estado[MAX_NOMBRE];
+    while (fscanf(file, " %d,%99[^,],%99[^,],%d,%99[^\n]", &id, nombre, categoria, &valor, estado) == 5) {
+        // Se muestra "00" como ID
+        printf("| %-5s | %-25s | %-25s | %-10d | %-20s |\n", "00", nombre, categoria, valor, estado);
+    }
+
+    fclose(file);
 }
 
-// FunciÃ³n para mostrar menÃº
-void mostrarMenu()
-{
-  printf("\n=== Menú VISSOR ===\n");
-  printf("1. Monitorear por Categoría\n");
-  printf("2. Agregar Nuevo Dispositivo\n");
-  printf("3. Salir\n");
-  printf("Seleccione una opción: ");
+int main() {
+    setlocale(LC_ALL, "");
+    int opcion;
+    do {
+        mostrarMenu();
+        scanf("%d", &opcion);
+
+        switch (opcion) {
+            case 1:
+                monitorearDispositivos(); // Mostrar todos los dispositivos
+                break;
+            case 2:
+                agregarDispositivo(); // Agregar un nuevo dispositivo
+                break;
+            case 3:
+                printf("Saliendo del sistema...\n");
+                break;
+            default:
+                printf("[ERROR] - Opción no válida. Intente nuevamente.\n");
+        }
+    } while (opcion != 3);
+
+    return 0;
 }
 
-// FunciÃ³n para agregar dispositivos
-void agregarDispositivo()
-{
-  if (contadorDispositivos >= MAX_DISPOSITIVOS)
-  {
-    printf("[ERROR] - No se pueden agregar más dispositivos, el límite ha sido "
-           "alcanzado.\n");
-    return;
-  }
-
-  printf("\nIngrese el nombre del dispositivo: ");
-  scanf(" %[^\n]", nombresDispositivos[contadorDispositivos]);
-
-  // MenÃº para seleccionar la categorÃ­a
-  int categoria;
-  int categoriaValida = 0;
-  while (!categoriaValida)
-  {
-  	int i;
-    printf("\nSeleccione la categoría del dispositivo:\n");
-    for (i = 0; i < MAX_CATEGORIAS; i++)
-    {
-      printf("%d. %s\n", i + 1, categorias[i]);
-    }
-
-    scanf("%d", &categoria);
-
-    if (categoria >= 1 && categoria <= MAX_CATEGORIAS)
-    {
-      strcpy(categoriasDispositivos[contadorDispositivos],
-             categorias[categoria - 1]);
-      categoriaValida = 1; // Categoria vÃ¡lida
-    }
-    else
-    {
-      printf("[ERROR] - Opción no válida. Intente nuevamente.\n");
-    }
-  }
-
-  // Asignar estado inicial como 'OK'
-  strcpy(estadosDispositivos[contadorDispositivos],
-         "[OK] - Dispositivo agregado correctamente.");
-
-  contadorDispositivos++;
-  printf("[OK] - Dispositivo agregado exitosamente.\n");
-}
-
-// FunciÃ³n para mostrar dispositivos de una categorÃ­a especÃ­fica
-void monitorearPorCategoria()
-{
-  int categoriaSeleccionada;
-  int categoriaValida = 0;
-  int i;
-  // SelecciÃ³n de categorÃ­a con validaciÃ³n
-  while (!categoriaValida)
-  {
-    printf("\nSeleccione la categoría que desea monitorear:\n");
-    for (i = 0; i < MAX_CATEGORIAS; i++)
-    {
-      printf("%d. %s\n", i + 1, categorias[i]);
-    }
-
-    scanf("%d", &categoriaSeleccionada);
-
-    if (categoriaSeleccionada >= 1 && categoriaSeleccionada <= MAX_CATEGORIAS)
-    {
-      categoriaValida = 1; // CategorÃ­a vÃ¡lida
-    }
-    else
-    {
-      printf("[ERROR] - Opción no válida. Intente nuevamente.\n");
-    }
-  }
-
-  printf("\n=== Dispositivos en la categoría '%s' ===\n",
-         categorias[categoriaSeleccionada - 1]);
-  printf("| %-25s | %-25s | %-20s | %-20s |\n", "Dispositivo", "Categoría",
-         "Estado", "Lectura");
-  printf("|-------------------------|-------------------------|----------------"
-         "------|----------------------|\n");
-
-  // Mostrar los dispositivos de la categorÃ­a seleccionada
-  for (i= 0; i < contadorDispositivos; i++)
-  {
-    if (strcmp(categoriasDispositivos[i],
-               categorias[categoriaSeleccionada - 1]) == 0)
-    {
-      // Asignar estado segÃºn el dispositivo y categorÃ­a
-      float lectura = 0.0;
-      if (strcmp(categoriasDispositivos[i], "Motores") == 0)
-      {
-        lectura =
-            (rand() % 100) + ((float)rand() / RAND_MAX); // SimulaciÃ³n de motor
-        actualizarEstadoMotor(lectura, i);
-      }
-      else if (strcmp(categoriasDispositivos[i],
-                      "LÃ­neas de ProducciÃ³n (Cintas Transportadoras)") == 0)
-      {
-        lectura =
-            (rand() % 500) +
-            ((float)rand() / RAND_MAX); // SimulaciÃ³n de banda transportadora
-        actualizarEstadoBandaTransportadora(lectura, i);
-      }
-      else if (strcmp(categoriasDispositivos[i], "Bombas y Compresores") ==
-               0)
-      {
-        lectura =
-            (rand() % 700) +
-            ((float)rand() / RAND_MAX); // SimulaciÃ³n de banda transportadora
-        actualizarEstadoBombasCompresores(lectura, i);
-      }
-      printf("| %-25s | %-25s | %-20s | %-20.2f |\n", nombresDispositivos[i],
-             categoriasDispositivos[i], estadosDispositivos[i], lectura);
-    }
-  }
-  printf("\n");
-}
-
-int main()
-{
-  srand(time(NULL));
-  int opcion;
-  setlocale(LC_ALL, "");
-  do
-  {
-    mostrarMenu();
-    scanf("%d", &opcion);
-
-    switch (opcion)
-    {
-    case 1:
-      monitorearPorCategoria(); // Monitorear por categorÃ­a seleccionada
-      break;
-    case 2:
-      agregarDispositivo(); // Agregar un nuevo dispositivo
-      break;
-    case 3:
-      printf("Saliendo del sistema...\n");
-      break;
-    default:
-      printf("[ERROR] - Opción no válida. Intente nuevamente.\n");
-    }
-  } while (opcion != 3);
-
-  return 0;
-}

@@ -2,6 +2,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#ifdef _WIN32
+#include <conio.h> // Para getch() en Windows
+#endif
 
 #define ARCHIVO_DISPOSITIVOS "../data/dispositivos.txt"
 
@@ -13,6 +16,16 @@ void mostrarMenu()
   printf("2. Agregar Nuevo Dispositivo\n");
   printf("3. Salir\n");
   printf("Seleccione una opción: ");
+}
+
+void esperarEnter()
+{
+  printf("Presione Enter para continuar...");
+#ifdef _WIN32
+  getch(); // Espera a que se presione una tecla en Windows
+#else
+  getchar(); // Espera a que se presione Enter en Linux
+#endif
 }
 
 void limpiarpantalla()
@@ -28,29 +41,28 @@ void limpiarpantalla()
 
 int main()
 {
-  setlocale(LC_ALL, ""); // Espa�ol con soporte UTF-8
+  setlocale(LC_ALL, ""); // Español con soporte UTF-8
   int opcion;
   do
   {
     mostrarMenu();
     scanf("%d", &opcion);
     printf("\n");
-    getchar();
     switch (opcion)
     {
     case 1:
       // monitorearDispositivos(); // Mostrar todos los dispositivos
       printf("Monitoreando dispositivos...\n");
-      getchar();
+      esperarEnter();
       limpiarpantalla();
       break;
     case 2:
       // agregarDispositivo(); // Agregar un nuevo dispositivo
-      getchar();
+      esperarEnter();
       limpiarpantalla();
       break;
     case 3:
-      getchar();
+      esperarEnter();
       limpiarpantalla();
       printf("Saliendo del sistema...\n");
       break;

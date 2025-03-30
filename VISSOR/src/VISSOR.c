@@ -8,6 +8,16 @@
 
 #define ARCHIVO_DISPOSITIVOS "../data/dispositivos.txt"
 
+// Definir la estructura para representar un dispositivo
+typedef struct
+{
+  int id;
+  char dispositivo[50];
+  char categoria[50];
+  char valor[50];
+  char estado[50];
+} Dispositivo;
+
 // Función para mostrar menú
 void mostrarMenu()
 {
@@ -40,6 +50,42 @@ void limpiarpantalla()
 #endif
 }
 
+void mostrarTablaCSV()
+{
+  FILE *archivo = fopen(ARCHIVO_DISPOSITIVOS, "r");
+  if (archivo == NULL)
+  {
+    printf("Error al abrir el archivo\n");
+    return;
+  }
+
+  char linea[200]; // Buffer para leer cada línea
+
+  // Encabezado de la tabla
+  printf("+----+-----------------+----------------------+-------+--------------------------------------------+\n");
+  printf("| ID | Dispositivo     | Categoría           | Valor | Estado                                     |\n");
+  printf("+----+-----------------+----------------------+-------+--------------------------------------------+\n");
+
+  Dispositivo disp; // Variable de tipo struct para almacenar cada fila del CSV
+
+  // Leer y mostrar cada línea del CSV
+  while (fgets(linea, sizeof(linea), archivo))
+  {
+    // Extraer los valores y almacenarlos en la estructura
+    if (sscanf(linea, "%d,%49[^,],%49[^,],%49[^,],%49[^\n]",
+               &disp.id, disp.dispositivo, disp.categoria, disp.valor, disp.estado) == 5)
+    {
+      // Imprimir la fila en formato tabular
+      printf("| %-2d | %-15s | %-20s | %-5s | %-42s |\n",
+             disp.id, disp.dispositivo, disp.categoria, disp.valor, disp.estado);
+    }
+  }
+
+  printf("+----+-----------------+----------------------+-------+--------------------------------------------+\n");
+
+  fclose(archivo);
+}
+
 int main()
 {
   setlocale(LC_ALL, ""); // Español con soporte UTF-8
@@ -54,18 +100,21 @@ int main()
     case 1:
       // monitorearDispositivos(); // Mostrar todos los dispositivos
       printf("Monitoreando dispositivos...\n");
+      mostrarTablaCSV();
       esperarEnter();
       limpiarpantalla();
       break;
     case 2:
       // agregarDispositivo(); // Agregar un nuevo dispositivo
+      limpiarpantalla();
+      mostrarTablaCSV();
       esperarEnter();
       limpiarpantalla();
       break;
     case 3:
+      printf("Saliendo del sistema...\n\n");
       esperarEnter();
       limpiarpantalla();
-      printf("Saliendo del sistema...\n");
       break;
     default:
       printf("[ERROR] - Opción no válida. Intente nuevamente.\n");

@@ -34,18 +34,23 @@ int main()
   {
     mostrarMenu();
     scanf("%d", &opcion);
-
+    printf("\n");
+    getchar();
     switch (opcion)
     {
     case 1:
       // monitorearDispositivos(); // Mostrar todos los dispositivos
+      printf("Monitoreando dispositivos...\n");
+      getchar();
       limpiarpantalla();
       break;
     case 2:
       // agregarDispositivo(); // Agregar un nuevo dispositivo
+      getchar();
       limpiarpantalla();
       break;
     case 3:
+      getchar();
       limpiarpantalla();
       printf("Saliendo del sistema...\n");
       break;

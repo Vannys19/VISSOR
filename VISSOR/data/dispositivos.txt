@@ -1,10 +1,10 @@
-01,ee,Motores,99,[ALERTA] Motor con alta velocidad!
-02,1,Motores,44,[OK] Motor funcionando correctamente.
-03,rrr,Bombas y Compresores,519,[OK] Bomba funcionando correctamente.
-04,2,Bombas y Compresores,250,[OK] Bomba funcionando correctamente.
-05,2,Bombas y Compresores,594,[OK] Bomba funcionando correctamente.
-06,2,Bombas y Compresores,18,[OK] Bomba funcionando correctamente.
-07,2,Bombas y Compresores,215,[OK] Bomba funcionando correctamente.
-08,2,Bombas y Compresores,524,[OK] Bomba funcionando correctamente.
-09,2,Bombas y Compresores,615,[ALERTA] Bomba con presión muy alta!
-10,2,Bombas y Compresores,421,[OK] Bomba funcionando correctamente.
+01,ee,Motores,58,[OK] Motor funcionando correctamente.
+02,1,Motores,5,[OK] Motor funcionando correctamente.
+03,rrr,Bombas y Compresores,193,[OK] Bomba funcionando correctamente.
+04,2,Bombas y Compresores,359,[OK] Bomba funcionando correctamente.
+05,2,Bombas y Compresores,491,[OK] Bomba funcionando correctamente.
+06,2,Bombas y Compresores,342,[OK] Bomba funcionando correctamente.
+07,2,Bombas y Compresores,300,[OK] Bomba funcionando correctamente.
+08,2,Bombas y Compresores,21,[OK] Bomba funcionando correctamente.
+09,2,Bombas y Compresores,10,[OK] Bomba funcionando correctamente.
+10,2,Bombas y Compresores,232,[OK] Bomba funcionando correctamente.

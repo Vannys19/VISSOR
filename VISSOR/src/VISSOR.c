@@ -1,5 +1,6 @@
 #include <locale.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 
 #define MAX_DISPOSITIVOS 10
@@ -108,8 +109,8 @@ void monitorearDispositivos() {
   while (fscanf(file, " %d,%99[^,],%99[^,],%d,%99[^\n]", &id, nombre, categoria,
                 &valor, estado) == 5) {
     // Se muestra "00" como ID
-    printf("| %-5s | %-25s | %-25s | %-10d | %-20s |\n", "00", nombre,
-           categoria, valor, estado);
+    printf("| %-5d | %-25s | %-25s | %-10d | %-20s |\n", id, nombre, categoria,
+           valor, estado);
   }
 
   fclose(file);
@@ -124,6 +125,7 @@ int main() {
 
     switch (opcion) {
     case 1:
+      system("bash ../src/scripts/script.bash");
       monitorearDispositivos(); // Mostrar todos los dispositivos
       break;
     case 2:

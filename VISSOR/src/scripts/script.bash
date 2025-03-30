@@ -1,8 +1,8 @@
 #!/bin/bash
 
 # Archivo donde están los dispositivos
-archivo="../../data/dispositivos.txt"
-temp_file="../../data/temp_dispositivos.txt"
+archivo="../data/dispositivos.txt"
+temp_file="../data/temp_dispositivos.txt"
 
 # Verificar si el archivo de dispositivos existe
 if [[ ! -f $archivo ]]; then
@@ -88,5 +88,3 @@ determinar_estado() {
 
 # Reemplazar el archivo original con el archivo temporal actualizado
 mv "$temp_file" "$archivo"
-
-echo "[OK] Los datos de los dispositivos han sido actualizados correctamente."

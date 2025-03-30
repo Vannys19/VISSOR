@@ -26,6 +26,7 @@ void esperarEnter()
 #else
   getchar(); // Espera a que se presione Enter en Linux
 #endif
+  getchar(); // Captura el Enter adicional que queda en el buffer
 }
 
 void limpiarpantalla()

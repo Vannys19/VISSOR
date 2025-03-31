@@ -18,15 +18,9 @@ typedef struct
   char estado[50];
 } Dispositivo;
 
-// Función para mostrar menú
-void mostrarMenu()
-{
-  printf("\n=== Menú VISSOR ===\n");
-  printf("1. Monitorear Dispositivos\n");
-  printf("2. Agregar Nuevo Dispositivo\n");
-  printf("3. Salir\n");
-  printf("Seleccione una opción: ");
-}
+int id_dispositivo; // Variable global para almacenar el ID del dispositivo
+int opcion;         // Variable global para almacenar la opción seleccionada
+int categoria;      // Variable global para almacenar la categoría seleccionada
 
 void esperarEnter()
 {
@@ -50,7 +44,106 @@ void limpiarpantalla()
 #endif
 }
 
-void mostrarTablaCSV()
+// Función para mostrar menú
+int menuPrincipal()
+{
+  printf("\n=== Menú VISSOR ===\n");
+  printf("1. Monitorear Dispositivos\n");
+  printf("2. Agregar Nuevo Dispositivo\n");
+  printf("3. Salir\n");
+  printf("Seleccione una opción: ");
+  scanf("%d", &opcion);
+  printf("\n");
+  return opcion;
+}
+
+// Función para mostrar el menú de categorías
+int menuCategorias()
+{
+  do
+  {
+    printf("\nSeleccione la categoría del dispositivo:\n");
+    printf("1. Motores\n");
+    printf("2. Bombas y Compresores\n");
+    printf("3. Cintas Transportadoras\n");
+    printf("Ingrese el número correspondiente: ");
+    scanf("%d", &categoria);
+
+    if (categoria < 1 || categoria > 3)
+    {
+      printf("Opción inválida. Intente nuevamente.\n");
+    }
+  } while (categoria < 1 || categoria > 3);
+  return categoria;
+}
+
+int validarID(int id_temp)
+{
+  return id_temp;
+}
+
+// Función para agregar un dispositivo al archivo
+void agregarDispositivo()
+{
+  FILE *archivo = fopen(ARCHIVO_DISPOSITIVOS, "a+"); // Abre el archivo para agregar datos
+  if (archivo == NULL)
+  {
+    printf("Error al abrir el archivo\n");
+    return;
+  }
+
+  // Contar cuántos dispositivos ya existen en el archivo
+  fseek(archivo, 0, SEEK_SET); // Mover el puntero al inicio del archivo
+  char linea[200];
+  int cantidadDispositivos = 0;
+  while (fgets(linea, sizeof(linea), archivo))
+  {
+    cantidadDispositivos++;
+  }
+
+  // Verificar si ya hay 10 dispositivos
+  if (cantidadDispositivos >= 10)
+  {
+    printf("\nYa hay 10 dispositivos registrados. No se puede agregar más.\n");
+    fclose(archivo);
+    return;
+  }
+
+  // Solicitar al usuario el ID del dispositivo
+  Dispositivo nuevoDispositivo;
+  printf("Ingrese el ID del dispositivo entre (0-1000): ");
+  scanf("%d", &id_dispositivo); // Leer el ID ingresado por el usuario
+  nuevoDispositivo.id = id_dispositivo;
+
+  // Limpiar el buffer de entrada
+  getchar();
+  categoria = menuCategorias(); // Llamar a la función del menú de categorías
+  // Cambiar la categoría según la opción seleccionada
+  switch (categoria)
+  {
+  case 1:
+    strcpy(nuevoDispositivo.categoria, "Motores");
+    break;
+  case 2:
+    strcpy(nuevoDispositivo.categoria, "Bombas y Compresores");
+    break;
+  case 3:
+    strcpy(nuevoDispositivo.categoria, "Cintas Transportadoras");
+    break;
+  }
+
+  // Solicitar al usuario el nombre del dispositivo
+  printf("Ingrese el nombre del dispositivo: ");
+  getchar(); // Limpiar el buffer de entrada
+  fgets(nuevoDispositivo.dispositivo, sizeof(nuevoDispositivo.dispositivo), stdin);
+  nuevoDispositivo.dispositivo[strcspn(nuevoDispositivo.dispositivo, "\n")] = '\0'; // Eliminar el salto de línea
+  fprintf(archivo, "%d,%s,%s, _,*\n", nuevoDispositivo.id, nuevoDispositivo.dispositivo, nuevoDispositivo.categoria);
+
+  printf("Dispositivo agregado correctamente.\n");
+  fclose(archivo);
+}
+
+void mostrarDatos()
 {
   FILE *archivo = fopen(ARCHIVO_DISPOSITIVOS, "r");
   if (archivo == NULL)
@@ -62,9 +155,9 @@ void mostrarTablaCSV()
   char linea[200]; // Buffer para leer cada línea
 
   // Encabezado de la tabla
-  printf("+----+-----------------+----------------------+-------+--------------------------------------------+\n");
-  printf("| ID | Dispositivo     | Categoría           | Valor | Estado                                     |\n");
-  printf("+----+-----------------+----------------------+-------+--------------------------------------------+\n");
+  printf("+--------+-----------------+------------------------+-------+--------------------------------------------+\n");
+  printf("| ID     | Dispositivo     | Categoría             | Valor | Estado                                     |\n");
+  printf("+--------+-----------------+------------------------+-------+--------------------------------------------+\n");
 
   Dispositivo disp; // Variable de tipo struct para almacenar cada fila del CSV
 
@@ -76,12 +169,12 @@ void mostrarTablaCSV()
                &disp.id, disp.dispositivo, disp.categoria, disp.valor, disp.estado) == 5)
     {
       // Imprimir la fila en formato tabular
-      printf("| %-2d | %-15s | %-20s | %-5s | %-42s |\n",
+      printf("| %-6d | %-15s | %-22s | %-5s | %-42s |\n",
              disp.id, disp.dispositivo, disp.categoria, disp.valor, disp.estado);
     }
   }
 
-  printf("+----+-----------------+----------------------+-------+--------------------------------------------+\n");
+  printf("+--------+-----------------+------------------------+-------+--------------------------------------------+\n");
 
   fclose(archivo);
 }
@@ -89,25 +182,21 @@ void mostrarTablaCSV()
 int main()
 {
   setlocale(LC_ALL, ""); // Español con soporte UTF-8
-  int opcion;
   do
   {
-    mostrarMenu();
-    scanf("%d", &opcion);
-    printf("\n");
+    opcion = menuPrincipal(); // Llamar a la función del menú principal
     switch (opcion)
     {
     case 1:
-      // monitorearDispositivos(); // Mostrar todos los dispositivos
       printf("Monitoreando dispositivos...\n");
-      mostrarTablaCSV();
+      mostrarDatos();
       esperarEnter();
       limpiarpantalla();
       break;
     case 2:
-      // agregarDispositivo(); // Agregar un nuevo dispositivo
       limpiarpantalla();
-      mostrarTablaCSV();
+      mostrarDatos();
+      agregarDispositivo();
       esperarEnter();
       limpiarpantalla();
       break;

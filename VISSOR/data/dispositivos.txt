@@ -1,10 +1,6 @@
 01,ee,Motores,58,[OK] Motor funcionando correctamente.
 02,1,Motores,5,[OK] Motor funcionando correctamente.
-03,rrr,Bombas y Compresores,193,[OK] Bomba funcionando correctamente.
-04,2,Bombas y Compresores,359,[OK] Bomba funcionando correctamente.
-05,2,Bombas y Compresores,491,[OK] Bomba funcionando correctamente.
-06,2,Bombas y Compresores,342,[OK] Bomba funcionando correctamente.
-07,2,Bombas y Compresores,300,[OK] Bomba funcionando correctamente.
-08,2,Bombas y Compresores,21,[OK] Bomba funcionando correctamente.
-09,2,Bombas y Compresores,10,[OK] Bomba funcionando correctamente.
-10,2,Bombas y Compresores,232,[OK] Bomba funcionando correctamente.
+-1111,1,Motores,5,[OK] Motor funcionando correctamente.
+-1111,penenene,Cintas Transportadoras, _,*
+34,,Motores,_,*
+222,222,Bombas y Compresores, _,*

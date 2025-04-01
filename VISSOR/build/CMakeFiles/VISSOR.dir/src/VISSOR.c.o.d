@@ -7,8 +7,9 @@ CMakeFiles/VISSOR.dir/src/VISSOR.c.o: \
  /usr/include/gnu/stubs-64.h \
  /usr/lib/gcc/x86_64-pc-linux-gnu/14.2.1/include/stddef.h \
  /usr/include/bits/locale.h /usr/include/bits/types/locale_t.h \
- /usr/include/bits/types/__locale_t.h /usr/include/stdio.h \
- /usr/include/bits/libc-header-start.h \
+ /usr/include/bits/types/__locale_t.h \
+ /usr/lib/gcc/x86_64-pc-linux-gnu/14.2.1/include/stdbool.h \
+ /usr/include/stdio.h /usr/include/bits/libc-header-start.h \
  /usr/lib/gcc/x86_64-pc-linux-gnu/14.2.1/include/stdarg.h \
  /usr/include/bits/types.h /usr/include/bits/typesizes.h \
  /usr/include/bits/time64.h /usr/include/bits/types/__fpos_t.h \

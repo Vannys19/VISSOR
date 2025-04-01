@@ -1,4 +1,4 @@
-1,ee,Motores,58,[OK] Motor funcionando correctamente.
-2,1,Motores,5,[OK] Motor funcionando correctamente.
-3,1,Motores,_,*
-4,pene,Bombas y Compresores,_,*
+,,,0,*
+1,12,Motores,72,[OK] Motor funcionando correctamente.
+2,123,Bombas y Compresores,110,[OK] Bomba funcionando correctamente.
+3,1234,Cintas Transportadoras,374,[OK] Banda transportadora funcionando correctamente.

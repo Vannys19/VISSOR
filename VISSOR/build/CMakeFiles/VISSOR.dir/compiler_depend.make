@@ -61,6 +61,7 @@ CMakeFiles/VISSOR.dir/src/VISSOR.c.o: /home/re-l/Escritorio/github/VISSOR/VISSOR
   /usr/include/sys/select.h \
   /usr/include/sys/types.h \
   /usr/lib/gcc/x86_64-pc-linux-gnu/14.2.1/include/stdarg.h \
+  /usr/lib/gcc/x86_64-pc-linux-gnu/14.2.1/include/stdbool.h \
   /usr/lib/gcc/x86_64-pc-linux-gnu/14.2.1/include/stddef.h
 
 VISSOR: /usr/lib/Scrt1.o \
@@ -97,6 +98,8 @@ VISSOR: /usr/lib/Scrt1.o \
 /usr/lib/crti.o:
 
 /usr/lib/Scrt1.o:
+
+/usr/lib/gcc/x86_64-pc-linux-gnu/14.2.1/include/stdbool.h:
 
 /usr/lib/gcc/x86_64-pc-linux-gnu/14.2.1/include/stdarg.h:
 

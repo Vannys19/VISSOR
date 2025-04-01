@@ -224,7 +224,11 @@ int main()
       mostrarDatos();
       esperarEnter();
       limpiarpantalla();
+#ifdef _WIN32
       system("python ./scripts/script.py");
+#elif __linux__
+      system("python3 ../src/scripts/script.py"); // Comando para Linux
+#endif
       break;
     case 2:
       limpiarpantalla();

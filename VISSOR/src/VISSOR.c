@@ -215,6 +215,11 @@ int main()
       mostrarDatos();
       esperarEnter();
       limpiarpantalla();
+#ifdef _WIN32
+      system(""); // Limpiar pantalla en Windows
+#elif __linux__
+      system("bash ./scripts/script.bash"); // Limpiar pantalla en Linux
+#endif
       break;
     case 2:
       limpiarpantalla();

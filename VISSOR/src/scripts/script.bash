@@ -15,15 +15,12 @@ generar_valor() {
     local categoria=$1
     case $categoria in
         "Motores")
-            # Para motores, generamos un valor entre 0 y 100
             echo "$((RANDOM % 101))"
             ;;
         "Líneas de Producción (Cintas Transportadoras)")
-            # Para las bandas transportadoras, generamos un valor entre 0 y 500
             echo "$((RANDOM % 501))"
             ;;
         "Bombas y Compresores")
-            # Para bombas y compresores, generamos un valor entre 0 y 700
             echo "$((RANDOM % 701))"
             ;;
         *)
@@ -64,13 +61,20 @@ determinar_estado() {
     esac
 }
 
+# Leer los IDs existentes en un array
+declare -A ids_existentes
+while IFS=, read -r id nombre categoria valor estado; do
+    ids_existentes[$id]=1
+done < "$archivo"
+
 # Abrir el archivo y actualizar los valores y estados
 {
-    id_counter=1
-    while IFS=, read -r id nombre categoria valor estado
-    do
-        # Generar un ID con formato de 2 dígitos (con ceros a la izquierda)
-        id_formateado=$(printf "%02d" "$id_counter")
+    while IFS=, read -r id nombre categoria valor estado; do
+        # Verificar si el ID ya existe, si no, asignar uno nuevo
+        while [[ -n "${ids_existentes[$id]}" ]]; do
+            ((id++))
+        done
+        ids_existentes[$id]=1
 
         # Generar un valor aleatorio dependiendo de la categoría
         valor_aleatorio=$(generar_valor "$categoria")
@@ -79,10 +83,7 @@ determinar_estado() {
         estado_aleatorio=$(determinar_estado "$categoria" "$valor_aleatorio")
 
         # Escribir los datos con el nuevo ID, valor y estado
-        printf "%s,%s,%s,%d,%s\n" "$id_formateado" "$nombre" "$categoria" "$valor_aleatorio" "$estado_aleatorio"
-
-        # Incrementar el contador de ID
-        ((id_counter++))
+        printf "%d,%s,%s,%d,%s\n" "$id" "$nombre" "$categoria" "$valor_aleatorio" "$estado_aleatorio"
     done < "$archivo"
 } > "$temp_file"
 

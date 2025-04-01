@@ -2,12 +2,13 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <stdbool.h> // Para el tipo booleano
 #ifdef _WIN32
 #include <conio.h> // Para getch() en Windows
 #endif
 
 #define ARCHIVO_DISPOSITIVOS "../data/dispositivos.txt"
-
+FILE *archivo;
 // Definir la estructura para representar un dispositivo
 typedef struct
 {
@@ -18,9 +19,8 @@ typedef struct
   char estado[50];
 } Dispositivo;
 
-int id_dispositivo; // Variable global para almacenar el ID del dispositivo
-int opcion;         // Variable global para almacenar la opción seleccionada
-int categoria;      // Variable global para almacenar la categoría seleccionada
+int opcion;    // Variable global para almacenar la opción seleccionada
+int categoria; // Variable global para almacenar la categoría seleccionada
 
 void esperarEnter()
 {
@@ -77,75 +77,9 @@ int menuCategorias()
   return categoria;
 }
 
-int validarID(int id_temp)
-{
-  return id_temp;
-}
-
-// Función para agregar un dispositivo al archivo
-void agregarDispositivo()
-{
-  FILE *archivo = fopen(ARCHIVO_DISPOSITIVOS, "a+"); // Abre el archivo para agregar datos
-  if (archivo == NULL)
-  {
-    printf("Error al abrir el archivo\n");
-    return;
-  }
-
-  // Contar cuántos dispositivos ya existen en el archivo
-  fseek(archivo, 0, SEEK_SET); // Mover el puntero al inicio del archivo
-  char linea[200];
-  int cantidadDispositivos = 0;
-  while (fgets(linea, sizeof(linea), archivo))
-  {
-    cantidadDispositivos++;
-  }
-
-  // Verificar si ya hay 10 dispositivos
-  if (cantidadDispositivos >= 10)
-  {
-    printf("\nYa hay 10 dispositivos registrados. No se puede agregar más.\n");
-    fclose(archivo);
-    return;
-  }
-
-  // Solicitar al usuario el ID del dispositivo
-  Dispositivo nuevoDispositivo;
-  printf("Ingrese el ID del dispositivo entre (0-1000): ");
-  scanf("%d", &id_dispositivo); // Leer el ID ingresado por el usuario
-  nuevoDispositivo.id = id_dispositivo;
-
-  // Limpiar el buffer de entrada
-  getchar();
-  categoria = menuCategorias(); // Llamar a la función del menú de categorías
-  // Cambiar la categoría según la opción seleccionada
-  switch (categoria)
-  {
-  case 1:
-    strcpy(nuevoDispositivo.categoria, "Motores");
-    break;
-  case 2:
-    strcpy(nuevoDispositivo.categoria, "Bombas y Compresores");
-    break;
-  case 3:
-    strcpy(nuevoDispositivo.categoria, "Cintas Transportadoras");
-    break;
-  }
-
-  // Solicitar al usuario el nombre del dispositivo
-  printf("Ingrese el nombre del dispositivo: ");
-  getchar(); // Limpiar el buffer de entrada
-  fgets(nuevoDispositivo.dispositivo, sizeof(nuevoDispositivo.dispositivo), stdin);
-  nuevoDispositivo.dispositivo[strcspn(nuevoDispositivo.dispositivo, "\n")] = '\0'; // Eliminar el salto de línea
-  fprintf(archivo, "%d,%s,%s, _,*\n", nuevoDispositivo.id, nuevoDispositivo.dispositivo, nuevoDispositivo.categoria);
-
-  printf("Dispositivo agregado correctamente.\n");
-  fclose(archivo);
-}
-
 void mostrarDatos()
 {
-  FILE *archivo = fopen(ARCHIVO_DISPOSITIVOS, "r");
+  archivo = fopen(ARCHIVO_DISPOSITIVOS, "r");
   if (archivo == NULL)
   {
     printf("Error al abrir el archivo\n");
@@ -176,6 +110,95 @@ void mostrarDatos()
 
   printf("+--------+-----------------+------------------------+-------+--------------------------------------------+\n");
 
+  fclose(archivo);
+}
+
+int validarID()
+{
+  archivo = fopen(ARCHIVO_DISPOSITIVOS, "r"); // Abrir el archivo en modo lectura
+  if (archivo == NULL)
+  {
+    printf("Error al abrir el archivo\n");
+    return -1; // Retornar un ID inválido
+  }
+
+  int id_dispositivo;
+  do
+  {
+    printf("Ingrese el ID del dispositivo entre (1-1000): ");
+    scanf("%d", &id_dispositivo);
+
+    if (id_dispositivo < 1 || id_dispositivo > 1000)
+    {
+      printf("ID inválido. Debe estar entre 1 y 1000.\n");
+    }
+  } while (id_dispositivo < 1 || id_dispositivo > 1000);
+  fclose(archivo);
+  return id_dispositivo;
+}
+
+// Función para agregar un dispositivo al archivo
+void agregarDispositivo()
+{
+  int id_dispositivo = validarID();            // Validar el ID del dispositivo
+  archivo = fopen(ARCHIVO_DISPOSITIVOS, "a+"); // Abre el archivo para agregar datos
+  if (archivo == NULL)
+  {
+    printf("Error al abrir el archivo\n");
+    return;
+  }
+
+  // Contar cuántos dispositivos ya existen en el archivo
+  fseek(archivo, 0, SEEK_SET); // Mover el puntero al inicio del archivo
+  char linea[200];
+  int cantidadDispositivos = 0;
+  while (fgets(linea, sizeof(linea), archivo))
+  {
+    cantidadDispositivos++;
+  }
+
+  // Verificar si ya hay 10 dispositivos
+  if (cantidadDispositivos >= 10)
+  {
+    printf("\nYa hay 10 dispositivos registrados. No se puede agregar más.\n");
+    fclose(archivo);
+    return;
+  }
+
+  // Solicitar al usuario el ID del dispositivo
+  Dispositivo nuevoDispositivo;
+
+  nuevoDispositivo.id = id_dispositivo; // Asignar un ID único
+  categoria = menuCategorias();         // Llamar a la función del menú de categorías
+  // Cambiar la categoría según la opción seleccionada
+  switch (categoria)
+  {
+  case 1:
+    strcpy(nuevoDispositivo.categoria, "Motores");
+    break;
+  case 2:
+    strcpy(nuevoDispositivo.categoria, "Bombas y Compresores");
+    break;
+  case 3:
+    strcpy(nuevoDispositivo.categoria, "Cintas Transportadoras");
+    break;
+  }
+
+  // Solicitar al usuario el nombre del dispositivo
+  printf("Ingrese el nombre del dispositivo: ");
+  getchar(); // Limpiar el buffer de entrada
+  fgets(nuevoDispositivo.dispositivo, sizeof(nuevoDispositivo.dispositivo), stdin);
+  nuevoDispositivo.dispositivo[strcspn(nuevoDispositivo.dispositivo, "\n")] = '\0'; // Eliminar el salto de línea
+  // Inicializar los valores vacíos antes de escribir en el archivo
+  strcpy(nuevoDispositivo.valor, "_");
+  strcpy(nuevoDispositivo.estado, "*");
+
+  // Escribir en el archivo con los valores correctamente asignados
+  fprintf(archivo, "%d,%s,%s,%s,%s\n",
+          nuevoDispositivo.id, nuevoDispositivo.dispositivo, nuevoDispositivo.categoria,
+          nuevoDispositivo.valor, nuevoDispositivo.estado);
+
+  printf("Dispositivo agregado correctamente.\n");
   fclose(archivo);
 }
 

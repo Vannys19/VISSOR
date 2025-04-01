@@ -1,6 +1,6 @@
 01,ee,Motores,58,[OK] Motor funcionando correctamente.
 02,1,Motores,5,[OK] Motor funcionando correctamente.
--1111,1,Motores,5,[OK] Motor funcionando correctamente.
--1111,penenene,Cintas Transportadoras, _,*
-34,,Motores,_,*
-222,222,Bombas y Compresores, _,*
+1,3,Cintas Transportadoras,_,*
+3,3,Cintas Transportadoras,_,*
+3,3,Cintas Transportadoras,_,*
+1,1,Motores,_,*

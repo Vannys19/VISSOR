@@ -1,4 +1,3 @@
-,,,0,*
-1,12,Motores,72,[OK] Motor funcionando correctamente.
-2,123,Bombas y Compresores,110,[OK] Bomba funcionando correctamente.
-3,1234,Cintas Transportadoras,374,[OK] Banda transportadora funcionando correctamente.
+1,12,Motores,86,[ALERTA] Motor con alta velocidad!
+2,123,Bombas y Compresores,330,[OK] Bomba funcionando correctamente.
+3,1234,Cintas Transportadoras,440,[ALERTA] Banda transportadora con velocidad muy alta!

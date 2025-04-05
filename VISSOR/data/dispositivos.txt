@@ -1,7 +1,1 @@
-1,M1,Motores,64,[OK] Motor funcionando correctamente.
-2,B1,Bombas y Compresores,131,[OK] Bomba funcionando correctamente.
-3,C1,Cintas Transportadoras,295,[OK] Banda transportadora funcionando correctamente.
-4,B2,Bombas y Compresores,507,[OK] Bomba funcionando correctamente.
-5,C2,Cintas Transportadoras,189,[OK] Banda transportadora funcionando correctamente.
-6,WE,Bombas y Compresores,557,[OK] Bomba funcionando correctamente.
-7,M2,Motores,81,[ALERTA] Motor con alta velocidad!
+1,M,Motores,96,[ALERTA] Motor con alta velocidad!

@@ -9,6 +9,8 @@
 #endif
 
 #define ARCHIVO_DISPOSITIVOS "../data/dispositivos.txt" // Ruta del archivo donde se guardan los dispositivos
+#define MAX_TAMANO 50                                   // Tamaño máximo para nombres de dispositivos y categorías
+#define MAX_DISPOSITIVOS 10                             // Máximo número de dispositivos permitidos
 FILE *archivo;                                          // Puntero al archivo para operaciones de lectura/escritura
 
 // Estructura que representa un dispositivo
@@ -54,7 +56,7 @@ void cargarIDs()
   int i = 0;
 
   // Leer línea por línea y extraer el ID hasta llenar el arreglo
-  while (fgets(linea, sizeof(linea), archivo) && i < 10)
+  while (fgets(linea, sizeof(linea), archivo) && i < MAX_DISPOSITIVOS)
   {
     sscanf(linea, "%d", &ids[i]);
     i++;
@@ -76,27 +78,6 @@ int menuPrincipal()
   return opcion;
 }
 
-// Muestra el menú de categorías y valida que esté entre 1 y 3
-int menuCategorias()
-{
-  do
-  {
-    printf("\nSeleccione la categoría del dispositivo:\n");
-    printf("1. Motores\n");
-    printf("2. Bombas y Compresores\n");
-    printf("3. Cintas Transportadoras\n");
-    printf("Ingrese el número correspondiente: ");
-    scanf("%d", &categoria);
-
-    if (categoria < 1 || categoria > 3)
-    {
-      printf("Opción inválida. Intente nuevamente.\n");
-    }
-  } while (categoria < 1 || categoria > 3);
-
-  return categoria;
-}
-
 // Muestra en pantalla todos los dispositivos guardados en el archivo
 void mostrarDatos()
 {
@@ -104,7 +85,15 @@ void mostrarDatos()
   if (archivo == NULL)
   {
     printf("Error al abrir el archivo\n");
-    return;
+    printf("No hay dispositivos registrados.\n");
+  }
+  else
+  {
+#ifdef _WIN32
+    system("python ./scripts/script.py"); // Ejecutar script en Windows
+#elif __linux__
+    system("python3 ../src/scripts/script.py"); // Ejecutar script en Linux
+#endif
   }
 
   char linea[200];
@@ -154,7 +143,7 @@ int validarID()
     else
     {
       // Verificar si el ID ya está en uso
-      for (i = 0; i < 10; i++)
+      for (i = 0; i < MAX_DISPOSITIVOS; i++)
       {
         if (ids[i] == id_dispositivo)
         {
@@ -169,17 +158,65 @@ int validarID()
   return id_dispositivo;
 }
 
+// Muestra el menú de categorías y valida que esté entre 1 y 3
+int menuCategorias()
+{
+  do
+  {
+    printf("\nSeleccione la categoría del dispositivo:\n");
+    printf("1. Motores\n");
+    printf("2. Bombas y Compresores\n");
+    printf("3. Cintas Transportadoras\n");
+    printf("Ingrese el número correspondiente: ");
+    scanf("%d", &categoria);
+
+    if (categoria < 1 || categoria > 3)
+    {
+      printf("Opción inválida. Intente nuevamente.\n");
+    }
+  } while (categoria < 1 || categoria > 3);
+
+  return categoria;
+}
+
+// Solicita el nombre del dispositivo y valida que no esté vacío
+void pedirNombreDispositivo(char nombre[])
+{
+  int longitud;
+  do
+  {
+    // Limpiar el buffer antes de leer la entrada
+    fflush(stdin); // En sistemas Windows, para limpiar el búfer de entrada
+
+    printf("Ingrese el nombre del dispositivo: ");
+    fgets(nombre, MAX_TAMANO, stdin);
+
+    // Eliminar el salto de línea
+    longitud = strcspn(nombre, "\n");
+    nombre[longitud] = '\0';
+
+    if (longitud == 0)
+    {
+      printf("El nombre no puede estar vacío. Intente de nuevo.\n");
+    }
+
+  } while (longitud == 0); // Continuar hasta que se ingrese un nombre válido
+}
+
 // Permite agregar un nuevo dispositivo al archivo
 void agregarDispositivo()
 {
-  int id_dispositivo = validarID(); // Validar ID único
-
+  mostrarDatos();                              // Mostrar antes de agregar
   archivo = fopen(ARCHIVO_DISPOSITIVOS, "a+"); // Abrir para agregar
   if (archivo == NULL)
   {
-    printf("Error al abrir el archivo\n");
-    return;
+    printf("Error al abrir el archivo... Creando nuevo archivo\n");
   }
+  // Preparar nuevo dispositivo
+  Dispositivo nuevoDispositivo;
+
+  int id_dispositivo = validarID(); // Validar ID único
+  nuevoDispositivo.id = id_dispositivo;
 
   // Contar dispositivos ya registrados
   fseek(archivo, 0, SEEK_SET);
@@ -198,10 +235,6 @@ void agregarDispositivo()
     return;
   }
 
-  // Preparar nuevo dispositivo
-  Dispositivo nuevoDispositivo;
-  nuevoDispositivo.id = id_dispositivo;
-
   categoria = menuCategorias(); // Elegir categoría
 
   // Asignar categoría según la opción
@@ -219,10 +252,7 @@ void agregarDispositivo()
   }
 
   // Pedir nombre del dispositivo
-  printf("Ingrese el nombre del dispositivo: ");
-  getchar(); // Limpiar buffer
-  fgets(nuevoDispositivo.dispositivo, sizeof(nuevoDispositivo.dispositivo), stdin);
-  nuevoDispositivo.dispositivo[strcspn(nuevoDispositivo.dispositivo, "\n")] = '\0';
+  pedirNombreDispositivo(nuevoDispositivo.dispositivo);
 
   // Inicializar campos por defecto
   strcpy(nuevoDispositivo.valor, "_");
@@ -249,18 +279,12 @@ int main()
     switch (opcion)
     {
     case 1:
-#ifdef _WIN32
-      system("python ./scripts/script.py"); // Ejecutar script en Windows
-#elif __linux__
-      system("python3 ../src/scripts/script.py"); // Ejecutar script en Linux
-#endif
       printf("Monitoreando dispositivos...\n");
       mostrarDatos();    // Mostrar los dispositivos
       limpiarPantalla(); // Pausa
       break;
 
     case 2:
-      mostrarDatos();       // Mostrar antes de agregar
       agregarDispositivo(); // Agregar nuevo
       limpiarPantalla();    // Pausa
       break;
@@ -272,6 +296,7 @@ int main()
 
     default:
       printf("[ERROR] - Opción no válida. Intente nuevamente.\n");
+      limpiarPantalla(); // Pausa
     }
 
   } while (opcion != 3); // Repetir hasta que el usuario elija salir

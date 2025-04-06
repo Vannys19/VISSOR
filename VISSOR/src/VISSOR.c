@@ -17,7 +17,7 @@ FILE *archivo;                                          // Puntero al archivo pa
 typedef struct
 {
   int id;
-  char dispositivo[50];
+  char dispositivo[100];
   char categoria[50];
   char valor[50];
   char estado[70];

@@ -1,1 +1,1 @@
-1,M,Motores,96,[ALERTA] Motor con alta velocidad!
+1,M,Motores,65,[OK] Motor funcionando correctamente.

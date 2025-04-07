@@ -3,10 +3,28 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-
 #ifdef _WIN32
 #include <conio.h> // Para getch() en Windows
 #endif
+
+/*
+  VISSOR
+  Descripción: Este programa permite monitorear y agregar dispositivos a un sistema de información.
+  Los dispositivos se clasifican en tres categorías: Motores, Bombas y Compresores, y Cintas Transportadoras.
+  El programa permite al usuario agregar nuevos dispositivos, asegurando que cada uno tenga un ID único y que
+  no exceda el límite de 10 dispositivos. Además, se proporciona una opción para visualizar todos los dispositivos
+  registrados. El programa utiliza un archivo de texto para almacenar la información de los dispositivos, lo que
+  permite su persistencia entre ejecuciones.
+  Desarrollado por:
+  - Ordaz Magos Juan Pablo
+  - Vazquez Vanesa Alejandra
+  - Gonzalez León Andrés
+  - Hernandez Espinoza Diana Sofía
+  - Barron Mata Jovanny
+  - Serrano García Alejandro
+  Fecha: 2025-04-05
+  Versión: 5.1
+*/
 
 #define ARCHIVO_DISPOSITIVOS "../data/dispositivos.txt" // Ruta del archivo donde se guardan los dispositivos
 #define MAX_TAMANO 50                                   // Tamaño máximo para nombres de dispositivos y categorías

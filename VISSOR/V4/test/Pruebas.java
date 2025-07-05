@@ -1,5 +1,5 @@
 package VISSOR.V4.test;
-import VISSOR.V4.src.Operativo;
+import VISSOR.V4.src.*;
 
 public class Pruebas {
     public static void main(String[] args) {

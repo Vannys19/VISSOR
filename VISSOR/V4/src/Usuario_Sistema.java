@@ -7,6 +7,15 @@ public abstract class Usuario_Sistema {
     private String email;
     private String passwordHash;
 
+    
+    public Usuario_Sistema(int idUsuario, String nombreUsuario, String sexo, String email, String passwordHash) {
+        this.idUsuario = idUsuario;
+        this.nombreUsuario = nombreUsuario;
+        this.sexo = sexo;
+        this.email = email;
+        this.passwordHash = passwordHash;
+    }
+    
     public int getIdUsuario() {
         return idUsuario;
     }
@@ -44,14 +53,6 @@ public abstract class Usuario_Sistema {
     }
 
     public void setPasswordHash(String passwordHash) {
-        this.passwordHash = passwordHash;
-    }
-
-    public Usuario_Sistema(int idUsuario, String nombreUsuario, String sexo, String email, String passwordHash) {
-        this.idUsuario = idUsuario;
-        this.nombreUsuario = nombreUsuario;
-        this.sexo = sexo;
-        this.email = email;
         this.passwordHash = passwordHash;
     }
 

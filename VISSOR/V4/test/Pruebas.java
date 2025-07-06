@@ -1,5 +1,5 @@
 package VISSOR.V4.test;
-import VISSOR.V4.src.*;
+import VISSOR.V4.src.Operativo;
 
 public class Pruebas {
     public static void main(String[] args) {
@@ -8,5 +8,7 @@ public class Pruebas {
         operativo.monitorearEstadoDeMaquinas();
         operativo.recibirNotificacionesDeAlerta();
         operativo.consultarHistorialBasicoDeDatosDeMaquina();
+        operativo.setNombreUsuario("DaveUpdated");
+        System.out.println(operativo.getNombreUsuario());
     }
 }

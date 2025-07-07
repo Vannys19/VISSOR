@@ -10,5 +10,6 @@ public class Pruebas {
         operativo.consultarHistorialBasicoDeDatosDeMaquina();
         operativo.setNombreUsuario("DaveUpdated");
         System.out.println(operativo.getNombreUsuario());
+        operativo.filtrarHistorialPorUltimasHorasODias("dias", 24);
     }
 }

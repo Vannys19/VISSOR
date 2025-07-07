@@ -22,4 +22,14 @@ public class Operativo extends Usuario_Operativo {
     public void visualizarPanelPrincipal() {
         System.out.println("Visualizando panel principal del Usuario Operativo__");
     }
+
+    public void filtrarHistorialPorUltimasHorasODias(String tipo, int cantidad) {
+        if (tipo.equals("dias")) {
+            System.out.println("Filtrando historial de " + cantidad + " días...");
+        } else if (tipo.equals("horas")) {
+            System.out.println("Filtrando historial de " + cantidad + " horas...");
+        } else {
+            System.out.println("Tipo de filtro no reconocido. Use 'dias' o 'horas'.");
+        }
+    }
 }

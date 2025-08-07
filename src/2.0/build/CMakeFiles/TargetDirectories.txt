@@ -1,3 +1,0 @@
-/home/re-l/Escritorio/github/VISSOR/VISSOR/build/CMakeFiles/VISSOR.dir
-/home/re-l/Escritorio/github/VISSOR/VISSOR/build/CMakeFiles/edit_cache.dir
-/home/re-l/Escritorio/github/VISSOR/VISSOR/build/CMakeFiles/rebuild_cache.dir

@@ -1,1 +1,0 @@
-1,M,Motores,65,[OK] Motor funcionando correctamente.
